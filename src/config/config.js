@@ -9,12 +9,18 @@ if (!process.env.PORT)
 }
 
 if (!process.env.MONGO_URI) {
-    throw new Error("PORT is not defined in enviromental variable");
+    throw new Error("MONGO_URI is not defined in enviromental variable");
+}
+
+if (!process.env.JWT_SECRET)
+{
+    throw new Error("JWT_SECRET is not defined in enviromental variable");
 }
 
 const config = {
     PORT: process.env.PORT,
-    MONGO_URI: process.env.MONGO_URI
+    MONGO_URI: process.env.MONGO_URI,
+    JWT_SECRET: process.env.JWT_SECRET
 }
 
 export default config;
