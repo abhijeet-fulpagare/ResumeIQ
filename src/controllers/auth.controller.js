@@ -2,8 +2,7 @@ import userModel from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import config from "../config/config.js";
 import jwt from "jsonwebtoken";
-
-
+import blackListTokenModel from "../models/blackListToken.model.js";
 
 const registerController = async (req, res) => {
     
@@ -120,4 +119,29 @@ const loginController = async (req, res) => {
     }
 }
 
-export { registerController ,loginController};
+
+const logoutController = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+
+        if (!token)
+        {
+            return res.status(403).json({ message:"Forbidden Token is required"})
+        }
+
+        await blackListTokenModel.create({
+            blackListToken:token,
+            expiresAt:new Date(Date.now() + 24*60*60*1000)
+        })
+
+        res.clearCookie("token");
+
+        res.status(200).json({ message: "User log-out Successfully" });
+    }catch(err)
+    {
+        console.log(err);
+        res.status(500).json({ message: "Internal Server error" });
+    }
+}
+
+export { registerController, loginController, logoutController };
