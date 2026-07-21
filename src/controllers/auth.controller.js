@@ -144,4 +144,25 @@ const logoutController = async (req, res) => {
     }
 }
 
-export { registerController, loginController, logoutController };
+const getMeController = async (req, res) => {
+
+    try {
+        const user = req.user;
+
+        const userData = await userModel.findById(user.id);
+
+        res.status(200).json({
+            message: "user details fetch Successfully",
+            user: {
+                id: userData._id,
+                username: userData.username,
+                email: userData.email,
+            }
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Internal Server error" });
+    }
+}
+
+export { registerController, loginController, logoutController, getMeController };

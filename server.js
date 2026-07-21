@@ -4,7 +4,7 @@ import connectDB from "./src/config/database.js";
 
 const PORT = config.PORT;
 
-//connectDB();
+connectDB();
 
 app.listen(PORT, () => {
     console.log("Server Running on port:", PORT);
