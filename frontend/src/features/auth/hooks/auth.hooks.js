@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../Auth.context.jsx";
-import { login, logout, register } from "../services/auth.api.js";
+import { getMe, login, logout, register } from "../services/auth.api.js";
 
 const useAuth = () => {
     const { user, setUser, loading, setLoading } = useContext(AuthContext);
@@ -39,6 +39,23 @@ const useAuth = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        const getAndSetUser = async () => {
+            try {
+                setLoading(true);
+
+                const data = await getMe();
+                setUser(data.user);
+            } catch (err) {
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        getAndSetUser();
+    }, []);
 
     return {
         user,
