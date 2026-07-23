@@ -26,15 +26,15 @@ const Login = () => {
 
   if (loading) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-zinc-900">
+      <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_50%_-30%,#20232c_0,#0b0d11_43%,#080a0d_100%)]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#f00059] border-t-transparent"></div>
 
           <h1 className="text-xl font-semibold text-white">
             Signing you in...
           </h1>
 
-          <p className="text-zinc-400">
+          <p className="text-[#8c929b]">
             Please wait a moment.
           </p>
         </div>
@@ -43,12 +43,12 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-900 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-zinc-800 rounded-2xl shadow-xl border border-zinc-700 p-8">
-        <h1 className="text-3xl font-bold text-white text-center">
-          Welcome Back
+    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_50%_-30%,#20232c_0,#0b0d11_43%,#080a0d_100%)] px-4 py-10">
+      <div className="w-full max-w-md rounded-[14px] border border-[#2a313a] bg-[#14181d]/95 p-8 shadow-[0_22px_70px_rgba(0,0,0,.28)]">
+        <h1 className="text-center text-3xl font-bold text-white">
+          Welcome <span className="bg-gradient-to-r from-[#f00059] to-[#c276e8] bg-clip-text text-transparent">Back</span>
         </h1>
-        <p className="text-zinc-400 text-center mt-2">
+        <p className="mt-2 text-center text-[#8c929b]">
           Sign in to continue
         </p>
 
@@ -56,7 +56,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-zinc-300 mb-2"
+              className="mb-2 block text-sm font-medium text-[#e2e4e8]"
             >
               Email
             </label>
@@ -65,14 +65,14 @@ const Login = () => {
               type="email"
               id="email"
               placeholder="Enter your email"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-900 px-4 py-3 text-white placeholder-zinc-500 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-[#3c444e] bg-[#1d222a] px-4 py-3 text-white placeholder-[#6f757e] outline-none transition focus:border-[#f00059] focus:ring-2 focus:ring-[#f00059]/20"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-zinc-300 mb-2"
+              className="mb-2 block text-sm font-medium text-[#e2e4e8]"
             >
               Password
             </label>
@@ -81,21 +81,21 @@ const Login = () => {
               type="password"
               id="password"
               placeholder="Enter your password"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-900 px-4 py-3 text-white placeholder-zinc-500 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-[#3c444e] bg-[#1d222a] px-4 py-3 text-white placeholder-[#6f757e] outline-none transition focus:border-[#f00059] focus:ring-2 focus:ring-[#f00059]/20"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700 active:scale-[0.98]"
+            className="w-full rounded-lg bg-gradient-to-r from-[#ee0057] to-[#ed075f] py-3 font-semibold text-white shadow-[0_8px_22px_rgba(240,0,89,.22)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(240,0,89,.34)] active:translate-y-0"
           >
             Sign In
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-zinc-400">
+        <p className="mt-6 text-center text-sm text-[#8c929b]">
           Don't have an account?{" "}
-          <span className="cursor-pointer font-medium text-blue-500 hover:text-blue-400">
+          <span className="cursor-pointer font-medium text-[#f00059] hover:text-[#c276e8]">
             <Link to={'/register'}>Sign Up</Link>
           </span>
         </p>
