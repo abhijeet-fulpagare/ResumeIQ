@@ -1,17 +1,34 @@
-import { getInterviewReport } from "../services/interviewReport.service";
-import useInterviewReport from "../hooks/useInterviewReport";
+import { useEffect } from "react";
+import { useParams } from "react-router";
+import useInterview from "../hooks/interview.hooks";
 import InterviewQuestions from "../components/InterviewQuestions";
 import InterviewReportSidebar from "../components/InterviewReportSidebar";
 import InterviewReportSummary from "../components/InterviewReportSummary";
 import InterviewRoadmap from "../components/InterviewRoadmap";
-
-const Interview = ({ report = getInterviewReport() }) => {
+const Interview = () => {
+	const { interviewId } = useParams();
 	const {
+		report,
+		reportLoading,
+		reportError,
+		loadReport,
 		activeSection,
 		expandedQuestion,
 		selectSection,
 		toggleQuestion,
-	} = useInterviewReport();
+	} = useInterview();
+
+	useEffect(() => {
+		loadReport(interviewId);
+	}, [interviewId, loadReport]);
+
+	if (reportLoading) {
+		return <main className="flex min-h-screen items-center justify-center bg-[#0b0d11] text-[#8c929b]">Loading interview report...</main>;
+	}
+
+	if (reportError || !report) {
+		return <main className="flex min-h-screen items-center justify-center bg-[#0b0d11] px-6 text-center text-[#ff6a98]">{reportError || "Interview report not found."}</main>;
+	}
 
 	const questions = activeSection === "behavioral"
 		? report.behavioralQuestions

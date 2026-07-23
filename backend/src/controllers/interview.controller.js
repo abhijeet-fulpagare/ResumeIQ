@@ -6,15 +6,23 @@ const generateInterviewReportController = async (req, res) => {
     try {
         const file = req.file;
 
-        if (!file) {
+        const { selfDescription, jobDescription } = req.body;
+
+        if (!file && !selfDescription?.trim()) {
             return res.status(400).json({
-                message: "Resume PDF is required.",
+                message: "Upload a resume or provide a self-description.",
             });
         }
 
-        const resumeContent = await pdfParse(file.buffer);
+        if (!jobDescription?.trim()) {
+            return res.status(400).json({
+                message: "Job description is required.",
+            });
+        }
 
-        const { selfDescription, jobDescription } = req.body;
+        const resumeContent = file
+            ? await pdfParse(file.buffer)
+            : { text: "No resume uploaded. Use the candidate self-description." };
 
         const interviewReportByAi = await generateInterviewReport({
             resume: resumeContent.text,
@@ -65,11 +73,28 @@ const getInterviewReportById = async (req, res) => {
 
         return res.status(500).json({
             message: "Failed to get interview report by id",
-            error: err.message,
         });
     }
 };
 
+async function getAllInterviewReportsController(req, res) {
 
+    try {
+        const interviewReports = await interviewReportModel.find({ user: req.user.id }).sort({ createdAt: -1 }).select("-resume -selfDescription -jobDescription -__v -technicalQuestions -behavioralQuestions -skillGaps -preparationPlan")
 
-export { generateInterviewReportController, getInterviewReportById ,};
+        res.status(200).json({
+            message: "Interview reports fetched successfully.",
+            interviewReports
+        })
+    }
+    catch (err) {
+        console.error(err);
+
+        return res.status(500).json({
+            message: "Failed to get interview report by id",
+        });
+    }
+    
+}
+
+export { generateInterviewReportController, getInterviewReportById, getAllInterviewReportsController };

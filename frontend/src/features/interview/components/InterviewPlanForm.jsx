@@ -1,4 +1,4 @@
-import useInterviewPlan from "../hooks/useInterviewPlan";
+import useInterview from "../hooks/interview.hooks";
 
 const BriefcaseIcon = () => (
     <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-current">
@@ -25,10 +25,10 @@ const SparkleIcon = () => (
 );
 
 const InterviewPlanForm = () => {
-    const { form, message, updateField, handleResume, handleSubmit } = useInterviewPlan();
+    const { form, formMessage, formLoading, updateField, handleResume, submitInterviewPlan } = useInterview();
 
     return (
-        <form onSubmit={handleSubmit} className="overflow-hidden rounded-[14px] border border-[#2a313a] bg-[#14181d]/95 shadow-[0_22px_70px_rgba(0,0,0,.28)]">
+        <form onSubmit={submitInterviewPlan} className="overflow-hidden rounded-[14px] border border-[#2a313a] bg-[#14181d]/95 shadow-[0_22px_70px_rgba(0,0,0,.28)]">
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <section className="border-b border-[#2a313a] p-5 sm:p-9 md:border-b-0 md:border-r">
                     <div className="flex items-center gap-2.5 border-b border-[#2a313a] pb-5">
@@ -60,10 +60,10 @@ const InterviewPlanForm = () => {
                             Upload Resume <span>(Best Results)</span>
                         </label>
                         <label className="flex min-h-[170px] cursor-pointer flex-col items-center justify-center gap-2 rounded-[10px] border-2 border-dashed border-[#3c444e] text-center transition hover:border-[#f00059] hover:bg-[#f00059]/5" htmlFor="resume-upload">
-                            <input className="hidden" id="resume-upload" type="file" accept=".pdf,.doc,.docx" onChange={handleResume} />
+                            <input className="hidden" id="resume-upload" type="file" accept=".pdf" onChange={handleResume} />
                             <span className="text-[#f00059]"><UploadIcon /></span>
                             <strong className="max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap text-[.8rem]">{form.resume ? form.resume.name : "Click to upload or drag & drop"}</strong>
-                            <small className="text-[.7rem] text-[#8c929b]">PDF or DOCX (Max 5MB)</small>
+                            <small className="text-[.7rem] text-[#8c929b]">PDF (Max 3MB)</small>
                         </label>
 
                         <div className="my-[27px] flex items-center gap-4 text-[.68rem] text-[#9da2a9] before:h-px before:flex-1 before:bg-[#2a313a] after:h-px after:flex-1 after:bg-[#2a313a]"><span>OR</span></div>
@@ -77,9 +77,9 @@ const InterviewPlanForm = () => {
                             placeholder="Briefly describe your experience, key skills, and years of experience if you don’t have a resume handy..."
                         />
 
-                        <div className={`mt-6 flex items-start gap-2.5 rounded-[7px] border px-3.5 py-3 text-[.7rem] leading-[1.35] ${message ? "border-[#f00059]/45 bg-[#f00059]/[.09] text-[#f7d5e2]" : "border-[#273b69] bg-[#12203d] text-[#d6def2]"}`} role="status">
-                            <span className={message ? "text-[#f00059]" : "text-[#68a8ff]"}>●</span>
-                            {message || "Either a Resume or a Self Description is required to generate a personalized plan."}
+                        <div className={`mt-6 flex items-start gap-2.5 rounded-[7px] border px-3.5 py-3 text-[.7rem] leading-[1.35] ${formMessage ? "border-[#f00059]/45 bg-[#f00059]/[.09] text-[#f7d5e2]" : "border-[#273b69] bg-[#12203d] text-[#d6def2]"}`} role="status">
+                            <span className={formMessage ? "text-[#f00059]" : "text-[#68a8ff]"}>●</span>
+                            {formMessage || "Either a Resume or a Self Description is required to generate a personalized plan."}
                         </div>
                     </div>
                 </section>
@@ -87,7 +87,7 @@ const InterviewPlanForm = () => {
 
             <footer className="flex flex-col items-stretch justify-between gap-5 border-t border-[#2a313a] px-5 py-[18px] text-[.72rem] text-[#8c929b] sm:flex-row sm:items-center sm:px-9 sm:py-5">
                 <span>AI-Powered Strategy Generation <i className="mx-1.5 not-italic text-[#5e6670]">•</i> Approx 30s</span>
-                <button type="submit" className="inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-[9px] border-0 bg-gradient-to-r from-[#ee0057] to-[#ed075f] px-6 font-sans text-[.86rem] font-bold text-white shadow-[0_8px_22px_rgba(240,0,89,.26)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(240,0,89,.36)] active:translate-y-0 sm:w-auto"><SparkleIcon /> Generate My Interview Strategy</button>
+                <button disabled={formLoading} type="submit" className="inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-[9px] border-0 bg-gradient-to-r from-[#ee0057] to-[#ed075f] px-6 font-sans text-[.86rem] font-bold text-white shadow-[0_8px_22px_rgba(240,0,89,.26)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_26px_rgba(240,0,89,.36)] active:translate-y-0 disabled:cursor-wait disabled:opacity-60 sm:w-auto">{formLoading ? "Generating Strategy..." : <><SparkleIcon /> Generate My Interview Strategy</>}</button>
             </footer>
         </form>
     );
