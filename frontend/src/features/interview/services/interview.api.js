@@ -27,3 +27,11 @@ export const getInterviewReports = async () => {
     const response = await api.get("/reports");
     return response.data;
 };
+
+export const generateResumePdf = async (interviewReportId) => {
+    const response = await api.post(`/resume/pdf/${interviewReportId}`, {}, {
+        responseType: "blob",
+    });
+
+    return response.data;
+};

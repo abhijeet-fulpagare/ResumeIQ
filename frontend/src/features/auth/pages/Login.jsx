@@ -24,23 +24,7 @@ const Login = () => {
     navigate('/');
   }
 
-  if (loading) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_50%_-30%,#20232c_0,#0b0d11_43%,#080a0d_100%)]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#f00059] border-t-transparent"></div>
-
-          <h1 className="text-xl font-semibold text-white">
-            Signing you in...
-          </h1>
-
-          <p className="text-[#8c929b]">
-            Please wait a moment.
-          </p>
-        </div>
-      </main>
-    );
-  }
+  
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_50%_-30%,#20232c_0,#0b0d11_43%,#080a0d_100%)] px-4 py-10">
