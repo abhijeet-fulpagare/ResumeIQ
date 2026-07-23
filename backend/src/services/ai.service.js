@@ -1,5 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import config from "../config/config.js";
+import puppeteer from "puppeteer";
+
 
 const ai = new GoogleGenAI({
     apiKey: config.GEMINI_API_KEY,
@@ -175,4 +177,99 @@ The JSON MUST exactly match the provided schema.
     }
 }
 
+
+async function generatePdfFromHtml(htmlContent) {
+    const browser = await puppeteer.launch();
+
+    try {
+        const page = await browser.newPage();
+
+        await page.setContent(htmlContent, {
+            waitUntil: "networkidle0",
+        });
+
+        const pdf = await page.pdf({
+            format: "A4",
+            margin: {
+                top: "20mm",
+                bottom: "20mm",
+                left: "15mm",
+                right: "15mm",
+            },
+        });
+
+        return Buffer.from(pdf);
+    } finally {
+        await browser.close();
+    }
+}
+
+
+
+const resumePdfSchema = {
+    type: "object",
+    properties: {
+        html: {
+            type: "string",
+            description:
+                "Complete HTML document for the resume that can be converted to PDF using Puppeteer."
+        }
+    },
+    required: ["html"]
+};
+
+async function generateResumePdf({
+    resume,
+    selfDescription,
+    jobDescription,
+}) {
+    try {
+        const prompt = `
+You are an expert resume writer.
+
+Generate a professional ATS-friendly resume in HTML format.
+
+Candidate Resume:
+${resume}
+
+Self Description:
+${selfDescription}
+
+Job Description:
+${jobDescription}
+
+Instructions:
+- Tailor the resume according to the job description.
+- Keep it professional and ATS friendly.
+- Use clean HTML with inline CSS.
+- Make it visually appealing but simple.
+- The resume should fit within 1-2 A4 pages.
+- Return ONLY valid JSON.
+- The JSON must contain exactly one field:
+{
+    "html": "<complete html document>"
+}
+`;
+
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: resumePdfSchema,
+            },
+        });
+
+        const { html } = JSON.parse(response.text);
+
+        const pdfBuffer = await generatePdfFromHtml(html);
+
+        return pdfBuffer;
+    } catch (error) {
+        console.error("Error generating resume PDF:", error);
+        throw error;
+    }
+}
+
 export default generateInterviewReport;
+export { generateResumePdf };
